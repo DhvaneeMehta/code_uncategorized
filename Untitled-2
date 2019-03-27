@@ -1,0 +1,56 @@
+import React, { Component } from 'react';
+import logo from './logo.svg';
+//import handler from '../handler/handler.js';
+import './App.css';
+import firebase from "firebase"
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
+
+
+firebase.initializeApp({
+  apiKey:"AIzaSyCxMHPkLW_PxgPO4w8njwLvA3Yib0NaY6c",
+  authDomain:"login-a48a4.firebaseapp.com"
+})
+
+class App extends Component {
+  state = { isSignedIn: false }
+  componentDidMount = ()=>{
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({isSignedIn:!!user})
+      //console.log("user",user)
+    })
+  }
+
+  handleSignIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider);
+  }
+
+  handleLogOut() {
+    firebase.auth().signOut();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="app_header">
+          <h2> App </h2>
+
+          { !this.state.user ? (
+            <button className="app_button"
+            onClick = {this.handleSignIn.bind(this)}
+            >Sign In</button>
+            ) : (
+              <button className="app_button"
+              onClick =  {this.handleLogOut.bind(this)}
+              >Logout</button>
+            )}
+        </div>
+        <div className = "app_username">
+              
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
